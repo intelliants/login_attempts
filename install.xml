@@ -10,13 +10,19 @@
 
     <configgroup name="login_attempts">Login attempts</configgroup>
 
-    <config group="login_attempts" name="login_attempts_divider" type="divider" description="Login attempts">Settings</config>
-    <config group="login_attempts" name="login_attempts_amount_limit_minute" type="text" description="Enter a limit in minutes">0</config>
-    <config group="login_attempts" name="login_attempts_amount" type="text" description="Enter a amount attempts">0</config>
-    <config group="login_attempts" name="login_attempts_period_time" type="text" description="Time period for attempts to enter a valid password">0</config>
+    <config group="login_attempts" name="login_attempts_divider" type="divider" description="Login attempts">Settings
+    </config>
+    <config group="login_attempts" name="login_attempts_amount_limit_minute" type="text"
+            description="Enter a limit in minutes">0
+    </config>
+    <config group="login_attempts" name="login_attempts_amount" type="text" description="Enter a amount attempts">0
+    </config>
+    <config group="login_attempts" name="login_attempts_period_time" type="text"
+            description="Time period for attempts to enter a valid password">0
+    </config>
 
     <pages>
-        <page name="login_attempts"  url="login_attempts/" filename="index" >login_attempts</page>
+        <page name="login_attempts" url="login_attempts/" filename="index">login_attempts</page>
     </pages>
     <hooks>
         <hook name="phpUserLogin" type="php" filename="hook.login_attempts.php"><![CDATA[]]></hook>

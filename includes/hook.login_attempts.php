@@ -25,25 +25,31 @@
  ******************************************************************************/
 function getDataConfig($confData)
 {
+
     $amountAttempts = 0;
     $periodTime = 0;
     $accessMinutes = 0;
 
     foreach ($confData as $key => $data) {
         if ($data['name'] == 'login_attempts_period_time') {
+
             $periodTime = $data['value'];
+
         }
-        if ($data['name'] == 'login_attempts_amount') {
-            $amountAttempts = 0;
-            if ($data['value'] != 0) $amountAttempts = $data['value'] - 1;
+        if ($data['name'] == 'login_attempts_amount' && $data['value'] != 0) {
+
+            $amountAttempts = $data['value'] - 1;
 
         }
         if ($data['name'] == 'login_attempts_amount_limit_minute') {
+
             $accessMinutes = $data['value'];
+
         }
     }
 
     return ['amount_attempts' => $amountAttempts, 'password_entry_period' => $periodTime, 'access_minutes' => $accessMinutes];
+
 }
 
 if ($userInfo == null) {
@@ -58,7 +64,7 @@ if ($userInfo == null) {
         'table' => 'sbr421_members',
         'email' => "'$login'"
     ]);
-    // get user on email
+
     $member = $iaDb->getRow($sql);
 
     $sql = "SELECT :columns from `:table` where `config_group` =  :group_name";
@@ -87,18 +93,18 @@ if ($userInfo == null) {
             'member_id' => "'$memberId'",
             'table' => 'sbr421_login_attempts',
         ]);
-        //get user blocked
+
         $userBlocked = $iaDb->getRow($sql);
 
         if ($userBlocked && $userBlocked['password_entry_period'] < date(iaDb::DATETIME_FORMAT)) {
+
             $iaDb->delete(iaDb::convertIds($userBlocked['id']), 'login_attempts');
             $userBlocked = null;
+
         }
 
         if ($userBlocked) {
 
-
-            //check user
             if ($userBlocked['access_time'] != null && $userBlocked['access_time'] > date(iaDb::DATETIME_FORMAT)) {
 
                 $_SESSION['access_time'] = $userBlocked['access_time'];
@@ -109,6 +115,7 @@ if ($userInfo == null) {
             } else {
 
                 if ($userBlocked['amount_attempts'] == 1) {
+
                     $val = [
                         'id' => $userBlocked['id'],
                         'amount_attempts' => $userBlocked['amount_attempts'] - 1,
@@ -122,9 +129,11 @@ if ($userInfo == null) {
 
                     $iaView->setMessages('You have exceeded your password entry limit');
                     iaUtil::go_to('/login');
+
                 }
 
                 if ($userBlocked['amount_attempts'] > 1) {
+
                     $val = [
                         'id' => $userBlocked['id'],
                         'amount_attempts' => $userBlocked['amount_attempts'] - 1,
@@ -132,6 +141,7 @@ if ($userInfo == null) {
                     ];
 
                     $iaDb->update($val, null, null, 'login_attempts');
+
                 }
             }
 
@@ -145,6 +155,7 @@ if ($userInfo == null) {
                 'password_entry_period' => $passwordEntryPeriod,
             ];
             $iaDb->insert($value, null, 'login_attempts');
+
         }
     } else {
 
@@ -167,10 +178,15 @@ if ($userInfo == null) {
 
             $_SESSION['password_entry_period'] = $passwordEntryPeriod;
             $_SESSION['amount_attempts'] = $configData['amount_attempts'];
+
         }
     }
-}else{
+} else {
+
     unset($_SESSION['access_time']);
     unset($_SESSION['isAllowed']);
     unset($_SESSION['password_entry_period']);
+
 }
+
+?>
