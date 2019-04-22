@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<module type="plugin" name="login_attempts">
+    <title>Login attempts</title>
+    <summary>Login attempt limiter</summary>
+    <author>Intelliants LLC</author>
+    <contributor>Intelliants LLC</contributor>
+    <version>1.0</version>
+    <date>2019-04-05</date>
+    <compatibility>4.2</compatibility>
+
+    <configgroup name="login_attempts">Login attempts</configgroup>
+
+    <config group="login_attempts" name="login_attempts_divider" type="divider" description="Login attempts">Settings</config>
+    <config group="login_attempts" name="login_attempts_amount_limit_minute" type="text" description="Enter a limit in minutes">0</config>
+    <config group="login_attempts" name="login_attempts_amount" type="text" description="Enter a amount attempts">0</config>
+    <config group="login_attempts" name="login_attempts_period_time" type="text" description="Time period for attempts to enter a valid password">0</config>
+
+    <pages>
+        <page name="login_attempts"  url="login_attempts/" filename="index" >login_attempts</page>
+    </pages>
+    <hooks>
+        <hook name="phpUserLogin" type="php" filename="hook.login_attempts.php"><![CDATA[]]></hook>
+        <hook name="phpCoreBeforeAuth" type="php" filename="hook.before_login_attempts.php"><![CDATA[]]></hook>
+    </hooks>
+
+    <install>
+        <sql>
+            <![CDATA[
+DROP TABLE IF EXISTS `{prefix}login_attempts`;
+            ]]>
+        </sql>
+
+        <sql>
+            <![CDATA[
+CREATE TABLE IF NOT EXISTS `{prefix}login_attempts` (
+    `id` mediumint(7) unsigned NOT NULL auto_increment,
+    `member_id` int(11) unsigned NOT NULL,
+    `ip_address` varchar(50),
+    `user_agent` varchar(100),
+    `amount_attempts` int(11),
+    `password_entry_period` datetime NULL,
+    `access_time` datetime NULL,
+    PRIMARY KEY  (`id`)
+) {mysql_version};
+            ]]>
+        </sql>
+    </install>
+</module>
